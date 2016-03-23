@@ -1,7 +1,7 @@
 # FCXTableView
 
 ##
-在iOS开发的过程中，UITableview是使用频率很高的控件之一，今天写的优化方法不是关于性能优化方面的，主要从为Controller瘦身方面考虑的。在使用tableView的时候不可避免的要谈到tableView的delegate和dataSource两个代理，我们经常会把这两个代理付给Controller，在Controller里面我们会实现它的几个代理方法，最常见的有以下几个：
+在iOS开发的过程中，UITableview是使用频率很高的控件之一，今天写的优化方法不是关于性能优化方面的，主要从为Controller瘦身方面考虑的。在使用tableView的时候不可避免的要谈到tableView的delegate和dataSource两个代理，我们经常会把这两个代理赋给Controller，在Controller里面我们会实现它的几个代理方法，最常见的有以下几个：
 ```objc
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
@@ -19,7 +19,7 @@
     self.dataSource = self;
 }
 ```
-为了实现相应的代理方法，Tableview必须要拿到数据源，考虑到Tableview有分组和不分组两种情况，这里增加了两个属性，其中dataArray是只有一组的情况（使用dataArray时会自动把dataArray放到一个数组里然后在赋值给groupArray），groupArray是多组时用到的，如果项目中不需要分组情况时groupArray是多余的，但为了考虑兼容问题还是加上了.
+为了实现相应的代理方法，Tableview必须要拿到数据源，考虑到Tableview有分组和不分组两种情况，这里增加了两个属性，其中dataArray是只有一组的情况（使用dataArray时会自动把dataArray放到一个数组里然后再赋值给groupArray），groupArray是多组时用到的，如果项目中不需要分组情况时groupArray是多余的，但为了考虑兼容问题还是加上了.
 
 ```objc
 @property (nonatomic, strong) NSMutableArray *groupArray;
@@ -110,7 +110,7 @@ _tableView.didSelectRowBlock = ^(NSIndexPath *indexPath, id data) {
 };
 ```
 ##无数据展示优化
-用Tableview展示数据的时候就会遇到没有数据或者网络请求失败等情况，需要给用户展示一个当前的无数据状态（上面提到的self.groupArray.count == 0，这个用来判断无数据情况），好点的做法是再设计的时候这里能够用一个通用的模板展示样式，只需要修改不同的提示文案内容即可，不过这里支持自定义展示样式并支持无数据状态的点击响应事件（noDataActionBlock用Block方式实现），只需传入你定义展示样式的noDataViewClass即可（具体可参考Demo）.
+用Tableview展示数据的时候就会遇到没有数据或者网络请求失败等情况，需要给用户展示一个当前的无数据状态（上面提到的self.groupArray.count == 0，这个用来判断无数据情况），好点的做法是在设计的时候这里能够用一个通用的模板展示样式，不过这里支持自定义展示样式并支持无数据状态的点击响应事件（noDataActionBlock用Block方式实现），只需传入你定义展示样式的noDataViewClass即可（具体可参考Demo）.
 ```objc
 @property (nonatomic, strong) Class noDataViewClass;
 @property (nonatomic, copy) FCXNoDataActionBlock noDataActionBlock;
