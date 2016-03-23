@@ -119,3 +119,18 @@ _tableView.noDataActionBlock = ^(){
 
 };
 ```
+##下拉刷新、上拉加载更多
+自己写了一套下拉刷新、上拉加载更多，只需添加以后代码即可，可以更好的和Tableview结合使用，
+- [GitHub连接](https://github.com/fengchuanxiang/RefreshView.git) [https://github.com/fengchuanxiang/RefreshView.git](https://github.com/fengchuanxiang/RefreshView.git)
+
+```objc
+[_tableView addHeaderWithRefreshHandler:^(FCXRefreshBaseView *refreshView) {
+
+}];
+
+[_tableView addFooterWithRefreshHandler:^(FCXRefreshBaseView *refreshView) {
+
+}];
+
+```
+
