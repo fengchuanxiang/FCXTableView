@@ -1,5 +1,7 @@
 # FCXTableView
-    在iOS开发的过程中，UITableview是被使用频率很高的空间之一，今天写的优化方法不是关于加载效率方面的，主要从为Controller瘦身方面考虑的。在使用tableView的时候不可避免的要谈到tableView的delegate和dataSource两个代理，我们经常会把这两个代理付给Controller，在Controller里面我们会实现它的几个代理方法，最常见的有以下几个：
+
+##
+在iOS开发的过程中，UITableview是使用频率很高的控件之一，今天写的优化方法不是关于性能优化方面的，主要从为Controller瘦身方面考虑的。在使用tableView的时候不可避免的要谈到tableView的delegate和dataSource两个代理，我们经常会把这两个代理付给Controller，在Controller里面我们会实现它的几个代理方法，最常见的有以下几个：
 ```objc
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
@@ -37,12 +39,12 @@
 }
 
 - (void)setDataArray:(NSMutableArray *)dataArray {
-NSAssert(dataArray, @"dataArray必须是数组类型");
+    NSAssert(dataArray, @"dataArray必须是数组类型");
 
-if (![dataArray isKindOfClass:[NSArray class]]) {
-return;
-}
-self.groupArray = [[NSMutableArray alloc] initWithObjects:dataArray, nil];
+    if (![dataArray isKindOfClass:[NSArray class]]) {
+        return;
+    }
+    self.groupArray = [[NSMutableArray alloc] initWithObjects:dataArray, nil];
 }
 ```
 ###在拿到数据源之后就可以实现代理方法了，后面解释为什么判断self.groupArray.count == 0和setDataModel:.
@@ -50,23 +52,21 @@ self.groupArray = [[NSMutableArray alloc] initWithObjects:dataArray, nil];
 ```objc
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     if (self.groupArray.count == 0) {//无数据时
-    return 1;
+        return 1;
     }
     return self.groupArray.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (self.groupArray.count == 0) {//无数据时
-    return 1;
+        return 1;
     }
-
     return [self.groupArray[section] count];
 }
 
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.groupArray.count == 0) {//无数据时
-    return 300;
+        return 300;
     }
     return 44;
 }
