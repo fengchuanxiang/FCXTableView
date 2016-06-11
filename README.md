@@ -1,7 +1,7 @@
 # FCXTableView
 
 ##
-在iOS开发的过程中，UITableview是使用频率很高的控件之一，今天写的优化方法不是关于性能优化方面的，主要从为Controller瘦身方面考虑的。在使用tableView的时候不可避免的要谈到tableView的delegate和dataSource两个代理，我们经常会把这两个代理赋给Controller，在Controller里面我们会实现它的几个代理方法，最常见的有以下几个：
+在iOS开发的过程中，UITableView是使用频率很高的控件之一，今天写的优化方法不是关于性能优化方面的，主要从为Controller瘦身方面考虑的。在使用TableView的时候不可避免的要谈到TableView的delegate和dataSource两个代理，我们经常会把这两个代理赋给Controller，在Controller里面我们会实现它的几个代理方法，最常见的有以下几个：
 ```objc
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
@@ -10,8 +10,8 @@
 ```
 这里会在Controller里面产生许多不必要的代码，下面就从这两个代理方法入手，来为Controller瘦身.
 
-##delegate、dataSource从Controller中去掉，交给Tableview自己处理
-在FCXTableView中将Tableview的delegate、dataSource付给自己.
+##delegate、dataSource从Controller中去掉，交给TableView自己处理
+在FCXTableView中将TableView的delegate、dataSource付给自己.
 
 ```objc
 - (void)fcx_setUp {
@@ -19,7 +19,7 @@
     self.dataSource = self;
 }
 ```
-为了实现相应的代理方法，Tableview必须要拿到数据源，考虑到Tableview有分组和不分组两种情况，这里增加了两个属性，其中dataArray是只有一组的情况（使用dataArray时会自动把dataArray放到一个数组里然后再赋值给groupArray），groupArray是多组时用到的，如果项目中不需要分组情况时groupArray是多余的，但为了考虑兼容问题还是加上了.
+为了实现相应的代理方法，TableView必须要拿到数据源，考虑到TableView有分组和不分组两种情况，这里增加了两个属性，其中dataArray是只有一组的情况（使用dataArray时会自动把dataArray放到一个数组里然后再赋值给groupArray），groupArray是多组时用到的，如果项目中不需要分组情况时groupArray是多余的，但为了考虑兼容问题还是加上了.
 
 ```objc
 @property (nonatomic, strong) NSMutableArray *groupArray;
