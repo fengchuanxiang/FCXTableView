@@ -110,7 +110,7 @@ _tableView.didSelectRowBlock = ^(NSIndexPath *indexPath, id data) {
 };
 ```
 ##无数据展示优化
-用Tableview展示数据的时候就会遇到没有数据或者网络请求失败等情况，需要给用户展示一个当前的无数据状态（上面提到的self.groupArray.count == 0，这个用来判断无数据情况），好点的做法是在设计的时候这里能够用一个通用的模板展示样式，不过这里支持自定义展示样式并支持无数据状态的点击响应事件（noDataActionBlock用Block方式实现），只需传入你定义展示样式的noDataViewClass即可（具体可参考Demo）.
+用TableView展示数据的时候就会遇到没有数据或者网络请求失败等情况，需要给用户展示一个当前的无数据状态（上面提到的self.groupArray.count == 0，这个用来判断无数据情况），好点的做法是在设计的时候这里能够用一个通用的模板展示样式，不过这里支持自定义展示样式并支持无数据状态的点击响应事件（noDataActionBlock用Block方式实现），只需传入你定义展示样式的noDataViewClass即可（具体可参考Demo）.
 ```objc
 @property (nonatomic, strong) Class noDataViewClass;
 @property (nonatomic, copy) FCXNoDataActionBlock noDataActionBlock;
@@ -120,7 +120,7 @@ _tableView.noDataActionBlock = ^(){
 };
 ```
 ##下拉刷新、上拉加载更多
-自己写了一套下拉刷新、上拉加载更多，只需添加一行代码即可，可以更好的和Tableview结合使用.
+自己写了一套下拉刷新、上拉加载更多，只需添加一行代码即可，可以更好的和TableView结合使用.
 - [GitHub连接](https://github.com/fengchuanxiang/RefreshView.git) [https://github.com/fengchuanxiang/RefreshView.git](https://github.com/fengchuanxiang/RefreshView.git)
 
 ```objc
