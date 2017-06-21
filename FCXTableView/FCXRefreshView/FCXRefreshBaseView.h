@@ -74,6 +74,4 @@ typedef void(^FCXPullingPercentHandler)(CGFloat pullingPercent);
 //重置没有更多的数据（消除没有更多数据的状态）
 - (void)resetNoMoreData;
 
-//移除scrollVIew所有的KVO观察，有时会在界面返回时闪退
-- (void)removeScrollViewObservers;
 @end
