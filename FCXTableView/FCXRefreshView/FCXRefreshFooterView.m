@@ -135,7 +135,7 @@
                 [_activityView stopAnimating];
                 
                 [UIView animateWithDuration:0.2 animations:^{
-                    arrowImageView.transform = CGAffineTransformMakeRotation(M_PI);
+                    arrowImageView.transform = CGAffineTransformMakeRotation(0.000001 - M_PI);
                     _scrollView.contentInset = _scrollViewOriginalEdgeInsets;
                 }];                
             }
@@ -153,7 +153,7 @@
                 _statusLabel.text = self.loadingStateText;
                 [_activityView startAnimating];
                 arrowImageView.hidden = YES;
-                arrowImageView.transform = CGAffineTransformMakeRotation(M_PI);
+                arrowImageView.transform = CGAffineTransformMakeRotation(0.000001 - M_PI);
                 [UIView animateWithDuration:0.2 animations:^{
                     UIEdgeInsets inset = _scrollView.contentInset;
                     inset.bottom += FCXHandingOffsetHeight;

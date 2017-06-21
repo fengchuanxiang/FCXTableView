@@ -111,7 +111,7 @@
             {
                 _statusLabel.text = self.pullingStateText;
                 [UIView animateWithDuration:0.2 animations:^{
-                    arrowImageView.transform = CGAffineTransformMakeRotation(M_PI);
+                    arrowImageView.transform = CGAffineTransformMakeRotation(0.000001 - M_PI);
                 }];
             }
                 break;
