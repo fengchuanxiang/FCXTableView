@@ -10,6 +10,5 @@
 
 @interface FCXRefreshHeaderView : FCXRefreshBaseView
 
-+ (instancetype)headerWithRefreshHandler:(FCXRefreshedHandler)refreshHandler;
 
 @end

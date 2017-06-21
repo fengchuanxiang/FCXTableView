@@ -20,12 +20,12 @@
 
 - (instancetype)initWithFrame:(CGRect)frame style:(UITableViewStyle)style {
     if (self = [super initWithFrame:frame style:style]) {
-        [self fcx_setUp];
+        [self fcx_setup];
     }
     return self;
 }
 
-- (void)fcx_setUp {
+- (void)fcx_setup {
     self.delegate = self;
     self.dataSource = self;
     //清除没有数据cell的横线
@@ -34,11 +34,9 @@
 
 - (void)setGroupArray:(NSMutableArray *)groupArray {
     NSAssert(groupArray, @"groupArray必须是数组类型");
-
     if (![groupArray isKindOfClass:[NSArray class]]) {
         return;
     }
-    
     if (_groupArray != groupArray) {
         _groupArray = groupArray;
         [self reloadData];
@@ -47,7 +45,6 @@
 
 - (void)setDataArray:(NSMutableArray *)dataArray {
     NSAssert(dataArray, @"dataArray必须是数组类型");
-
     if (![dataArray isKindOfClass:[NSArray class]]) {
         return;
     }
@@ -70,10 +67,8 @@
     if (self.groupArray.count == 0) {//无数据时
         return 1;
     }
-    
     return [self.groupArray[section] count];
 }
-
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.groupArray.count == 0) {//无数据时
@@ -83,11 +78,9 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
     if (self.groupArray.count == 0) {//无数据时
         return self.noDataCell;
     }
-    
     NSAssert([self.groupArray[indexPath.section] isKindOfClass:[NSArray class]], @"groupArray中的数据必须是数组类型");
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:self.cellIdentifier forIndexPath:indexPath];
@@ -97,15 +90,17 @@
         id dataModel = [self.groupArray[indexPath.section] objectAtIndex:indexPath.row];
         
         //这里的setDataModel：是更新cell数据模型的方法，可自行定义，可参考FCXTableViewCell
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored"-Wundeclared-selector"
         if ([cell respondsToSelector:@selector(setDataModel:)]) {
             [cell performSelectorOnMainThread:@selector(setDataModel:) withObject:dataModel waitUntilDone:NO];
         }
+#pragma clang diagnostic pop
     }
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     if (self.groupArray.count == 0) {//无数据时
         return;
     }
@@ -118,7 +113,6 @@
         self.didSelectRowBlock(indexPath, [self.groupArray[indexPath.section] objectAtIndex:indexPath.row]);
     }
 }
-
 
 #pragma mark - 无数据时显示的cell
 - (UITableViewCell *)noDataCell {

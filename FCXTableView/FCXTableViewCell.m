@@ -12,14 +12,12 @@
 
 - (void)awakeFromNib {
     // Initialization code
+    [super awakeFromNib];
 }
-
-
 
 - (void)setDataModel:(NSString *)dataModel {
     //这里可以进行数据显示的处理
     self.textLabel.text = dataModel;
 }
-
 
 @end

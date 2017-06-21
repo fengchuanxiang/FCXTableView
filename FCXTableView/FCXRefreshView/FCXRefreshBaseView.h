@@ -21,35 +21,39 @@ typedef NS_ENUM(NSInteger, FCXRefreshViewType) {
 };
 
 //刷新偏移量的高度
-static const CGFloat FCXLoadingOffsetHeight = 60;
+static const CGFloat FCXHandingOffsetHeight = 60;
 //文本颜色
 #define FCXREFRESHTEXTCOLOR [UIColor colorWithRed:150/255.0 green:150/255.0 blue:150/255.0 alpha:1.0]
 
 @class FCXRefreshBaseView;
 typedef void(^FCXRefreshedHandler)(FCXRefreshBaseView *refreshView);
+typedef void(^FCXPullingPercentHandler)(CGFloat pullingPercent);
 
 
 @interface FCXRefreshBaseView : UIView
 {
     UILabel *_timeLabel;
     UILabel *_statusLabel;
-    UIImageView *_arrowImage;
+    UIImageView *arrowImageView;
     UIActivityIndicatorView *_activityView;
-    UIEdgeInsets _originalEdgeInset;
+    __weak UIScrollView *_scrollView;//!<添加刷新的scrollView
+    UIEdgeInsets _scrollViewOriginalEdgeInsets;
+    FCXRefreshState _refreshState;//!<当前刷新状态
 }
 
-@property (nonatomic, weak) UIScrollView *scrollView;//!<添加刷新的scrollView
 @property (nonatomic, copy) FCXRefreshedHandler refreshHandler;//!<刷新的相应事件
 @property (nonatomic, unsafe_unretained) FCXRefreshState refreshState;//!<当前刷新状态
+@property (nonatomic, unsafe_unretained) CGFloat pullingPercent;
+@property (nonatomic, copy) FCXPullingPercentHandler pullingPercentHandler;//!<刷新的相应事件
+
 @property (nonatomic, copy) NSString *normalStateText;//!<正常状态文本
 @property (nonatomic, copy) NSString *pullingStateText;//!<下拉状态提示文本
 @property (nonatomic, copy) NSString *loadingStateText;//!<加载中的提示文本
 @property (nonatomic, copy) NSString *noMoreDataStateText;//!<没有更多数据提示文本
 
 
-
 //设置各种状态的文本
-- (void)setStateText;
+- (void)setupStateText;
 
 /**
  *  添加刷新的界面
@@ -57,8 +61,8 @@ typedef void(^FCXRefreshedHandler)(FCXRefreshBaseView *refreshView);
  *  注：如果想自定义刷新加载界面，可在子类中重写该方法进行布局子界面
  */
 - (void)addRefreshContentView;
-//开始刷新
-- (void)startRefresh;
+//自动刷新
+- (void)autoRefresh;
 //结束刷新
 - (void)endRefresh;
 // 当scrollView的contentOffset发生改变的时候调用
@@ -70,4 +74,6 @@ typedef void(^FCXRefreshedHandler)(FCXRefreshBaseView *refreshView);
 //重置没有更多的数据（消除没有更多数据的状态）
 - (void)resetNoMoreData;
 
+//移除scrollVIew所有的KVO观察，有时会在界面返回时闪退
+- (void)removeScrollViewObservers;
 @end

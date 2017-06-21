@@ -16,7 +16,4 @@
 @property (nonatomic, unsafe_unretained) BOOL autoLoadMore;
 
 
-+ (instancetype)footerWithRefreshHandler:(FCXRefreshedHandler)refreshHandler;
-
-
 @end

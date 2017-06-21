@@ -30,7 +30,6 @@
     [self setupTableViewAction];
 }
 
-
 - (void)addRefreshHeaderAndFooter {
     __block int t = 1;
     __weak FCXTableView *weakTableView = _tableView;
@@ -38,7 +37,7 @@
     //添加下拉刷新
     [_tableView addHeaderWithRefreshHandler:^(FCXRefreshBaseView *refreshView) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            weakTableView.groupArray = @[@[@"1-1", @"1-2", @"1-3"], @[@"2-1", @"2-2", @"2-3"], @[@"3-1", @"3-2", @"3-3"], @[@"4-1", @"4-2", @"4-3"], @[@"5-1", @"5-2", @"5-3"], @[@"6-1", @"6-2", @"6-3"]];
+            weakTableView.groupArray = [@[@[@"1-1", @"1-2", @"1-3"], @[@"2-1", @"2-2", @"2-3"], @[@"3-1", @"3-2", @"3-3"], @[@"4-1", @"4-2", @"4-3"], @[@"5-1", @"5-2", @"5-3"], @[@"6-1", @"6-2", @"6-3"]] mutableCopy];
             t = 1;
             [refreshView endRefresh];
         });

@@ -11,72 +11,83 @@
 
 @implementation FCXRefreshBaseView
 
-
-- (void)removeFromSuperview {
-    [self.superview removeObserver:self forKeyPath:@"contentOffset" context:nil];
-    [self.superview removeObserver:self forKeyPath:@"contentSize" context:nil];
-    
-    [super removeFromSuperview];
-}
-
-- (void)willMoveToSuperview:(UIView *)newSuperview {
-    [super willMoveToSuperview:newSuperview];
-}
-
-- (instancetype)init {
-    if (self = [super init]) {
-        [self setStateText];
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
         [self addRefreshContentView];
+        [self setupStateText];
         self.refreshState = FCXRefreshStateNormal;
     }
     return self;
 }
 
-- (void)addRefreshContentView {
-    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
-    self.frame = CGRectMake(0, -FCXLoadingOffsetHeight, screenWidth, FCXLoadingOffsetHeight);
-    self.backgroundColor = [UIColor clearColor];
-    [self.scrollView addSubview:self];
+- (void)willMoveToSuperview:(UIView *)newSuperview {
+    [super willMoveToSuperview:newSuperview];
     
+    [self removeScrollViewObservers];
+    if ([newSuperview isKindOfClass:[UIScrollView class]]) {
+        _scrollView = (UIScrollView *)newSuperview;
+        _scrollViewOriginalEdgeInsets = _scrollView.contentInset;
+        [self addScrollViewObservers];
+    }
 }
 
-- (void)setStateText {}
-
-- (void)setScrollView:(UIScrollView *)scrollView {
-    if (_scrollView != scrollView) {
-        _originalEdgeInset = scrollView.contentInset;
-        [_scrollView removeObserver:self forKeyPath:@"contentOffset" context:nil];
-        [_scrollView removeObserver:self forKeyPath:@"contentSize" context:nil];
-        
-        _scrollView = scrollView;
-        [_scrollView addSubview:self];
-        [_scrollView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:nil];
-        [_scrollView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:nil];
+- (void)addRefreshContentView {}
+- (void)setupStateText {}
+- (void)autoRefresh {}
+- (void)endRefresh {
+    self.refreshState = FCXRefreshStateNormal;
+}
+- (void)showNoMoreData {}
+- (void)resetNoMoreData {}
+- (void)setPullingPercent:(CGFloat)pullingPercent {
+    if (_pullingPercent != pullingPercent) {
+        _pullingPercent = pullingPercent;
+        if (_pullingPercentHandler) {
+            _pullingPercentHandler(_pullingPercent);
+        }
     }
+}
+
+#pragma mark - KVO
+- (void)addScrollViewObservers {
+    [_scrollView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:nil];
+    [_scrollView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:nil];
+    [_scrollView addObserver:self forKeyPath:@"contentInset" options:NSKeyValueObservingOptionNew context:nil];
+}
+
+- (void)removeScrollViewObservers {
+    [_scrollView removeObserver:self forKeyPath:@"contentOffset" context:nil];
+    [_scrollView removeObserver:self forKeyPath:@"contentSize" context:nil];
+    [_scrollView removeObserver:self forKeyPath:@"contentInset" context:nil];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    //正在刷新
-    if (self.refreshState == FCXRefreshStateLoading) {
-        return;
-    }
-    
     if ([keyPath isEqualToString:@"contentOffset"]) {
+        //正在刷新
+        if (_refreshState == FCXRefreshStateLoading) {
+            return;
+        }
         [self scrollViewContentOffsetDidChange];
     } else if ([keyPath isEqualToString:@"contentSize"]) {
         [self scrollViewContentSizeDidChange];
+    } else if ([keyPath isEqualToString:@"contentInset"]) {
+        if (_refreshState == FCXRefreshStateLoading) {
+            return;
+        }
+        _scrollViewOriginalEdgeInsets = _scrollView.contentInset;
     }
 }
 
 - (void)scrollViewContentOffsetDidChange {}
 - (void)scrollViewContentSizeDidChange {}
 
-- (void)startRefresh {}
-- (void)endRefresh {
-    self.refreshState = FCXRefreshStateNormal;
+- (void)removeFromSuperview {
+    [self removeScrollViewObservers];
+    [super removeFromSuperview];
 }
 
-- (void)showNoMoreData {}
-- (void)resetNoMoreData {}
+- (void)dealloc {
+    [self removeScrollViewObservers];
+}
 
 @end

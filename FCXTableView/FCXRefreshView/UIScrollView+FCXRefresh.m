@@ -13,14 +13,16 @@
 @implementation UIScrollView (FCXRefresh)
 
 - (FCXRefreshHeaderView *)addHeaderWithRefreshHandler:(FCXRefreshedHandler)refreshHandler {
-    FCXRefreshHeaderView *header = [FCXRefreshHeaderView headerWithRefreshHandler:refreshHandler];
-    header.scrollView = self;
+    FCXRefreshHeaderView *header = [[FCXRefreshHeaderView alloc] initWithFrame:CGRectMake(0, -60, [UIScreen mainScreen].bounds.size.width, 60)];
+    header.refreshHandler = refreshHandler;
+    [self addSubview:header];
     return header;
 }
 
 - (FCXRefreshFooterView *)addFooterWithRefreshHandler:(FCXRefreshedHandler)refreshHandler {
-    FCXRefreshFooterView *footer = [FCXRefreshFooterView footerWithRefreshHandler:refreshHandler];
-    footer.scrollView = self;
+    FCXRefreshFooterView *footer = [[FCXRefreshFooterView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 60)];
+    footer.refreshHandler = refreshHandler;
+    [self addSubview:footer];
     return footer;
 }
 
