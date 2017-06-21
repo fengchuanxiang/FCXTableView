@@ -56,9 +56,11 @@
 }
 
 - (void)removeScrollViewObservers {
-    [_scrollView removeObserver:self forKeyPath:@"contentOffset" context:nil];
-    [_scrollView removeObserver:self forKeyPath:@"contentSize" context:nil];
-    [_scrollView removeObserver:self forKeyPath:@"contentInset" context:nil];
+    if ([self.superview isKindOfClass:[UIScrollView class]]) {
+        [self.superview removeObserver:self forKeyPath:@"contentOffset" context:nil];
+        [self.superview removeObserver:self forKeyPath:@"contentSize" context:nil];
+        [self.superview removeObserver:self forKeyPath:@"contentInset" context:nil];
+    }
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -80,14 +82,5 @@
 
 - (void)scrollViewContentOffsetDidChange {}
 - (void)scrollViewContentSizeDidChange {}
-
-- (void)removeFromSuperview {
-    [self removeScrollViewObservers];
-    [super removeFromSuperview];
-}
-
-- (void)dealloc {
-    [self removeScrollViewObservers];
-}
 
 @end
